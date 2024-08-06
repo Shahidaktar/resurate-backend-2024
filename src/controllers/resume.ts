@@ -12,12 +12,12 @@ export const newResume = TryCatch(
     res: Response,
     next: NextFunction
   ) => {
-    const { user,job} = req.body;
+    const { user} = req.body;
     const singleresume = req.file;
 
     if (!singleresume) return next(new ErrorHandler("Please add Resume", 400));
 
-    if (!user || !job) {
+    if (!user) {
       rm(singleresume.path, () => console.log("deleted"));
       return next(new ErrorHandler("Please add all fields", 400));
     }
@@ -25,12 +25,10 @@ export const newResume = TryCatch(
     const resume = await Resume.create({
       user,
       singleresume: singleresume.path,
-      job
     });
     return res.status(201).json({
       success: true,
       message: "Resume uploaded Successfully",
-      job,
       resume,
     });
   }

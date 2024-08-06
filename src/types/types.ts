@@ -17,7 +17,6 @@ export interface NewUserRequestBody {
 }
 export interface NewResumeRequestBody {
   user: string;
-  job:string;
   singleresume: string;
 }
 
