@@ -17,6 +17,7 @@ export interface NewUserRequestBody {
 }
 export interface NewResumeRequestBody {
   user: string;
+  job:string;
   singleresume: string;
 }
 
@@ -61,5 +62,7 @@ export interface BaseQuery {
 
 export interface NewApplyRequestBody {
   user: string;
+  resume:string;
+  score:number;
   job: string;
 }

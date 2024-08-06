@@ -3,6 +3,7 @@ import {
   allApplies,
   changeStatus,
   deleteApply,
+  existingApply,
   getSingleApply,
   myApplies,
   newApply,
@@ -14,6 +15,8 @@ const app = express.Router();
 app.post("/new", newApply);
 
 app.get("/my", myApplies);
+
+app.get("/existing/:id", existingApply);
 
 app.get("/all/:id",adminOnly, allApplies);
 

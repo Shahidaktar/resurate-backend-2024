@@ -7,10 +7,18 @@ const schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
+    resume: {
+      type: String,
+      ref: "Resume",
+      required: true,
+    },
+    score: {
+      type: Number,
+      required: true,
+    },
     status: {
       type: String,
-      enum: ["Pending", "Selected", "Not Selected"],
+      enum: ["Pending", "Selected", "Rejected"],
       default: "Pending",
     },
     job: {
