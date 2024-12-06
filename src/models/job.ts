@@ -22,16 +22,17 @@ const schema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter skils"],
     },
-    eligbilty: {
+    status: {
       type: String,
-      required: [true, "Please enter eligbilty"],
+      enum: ["open", "close"],
+      default: "open",
     },
     pay: {
       type: String,
       required: [true, "Please enter Salary"],
     },
     experience: {
-      type: String,
+      type: Number,
       required: [true, "Please enter experience"],
     },
     jobType: {
@@ -46,13 +47,10 @@ const schema = new mongoose.Schema(
       type: Number,
       required: [true, "Please enter Openings"],
     },
-    startDate: {
-      type: Date,
-      required: [true, "Please enter Date of Birth"],
-    },
-    endDate: {
-      type: Date,
-      required: [true, "Please enter Date of Birth"],
+    user: {
+      type: String,
+      ref: "User",
+      required: true,
     },
   },
   { timestamps: true }

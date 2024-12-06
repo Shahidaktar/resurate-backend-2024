@@ -26,8 +26,8 @@ const schema = new mongoose.Schema(
     
     role: {
       type: String,
-      enum: ["admin", "user"],
-      default: "user",
+      enum: ["admin", "user","recruiter"],
+      required: [true, "Please enter Role"],
     },
     gender: {
       type: String,

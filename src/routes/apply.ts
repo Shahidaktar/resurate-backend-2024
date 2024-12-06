@@ -8,7 +8,7 @@ import {
   myApplies,
   newApply,
 } from "../controllers/apply.js";
-import { adminOnly } from "../middlewares/auth.js";
+import {  recruiterOnly } from "../middlewares/auth.js";
 
 const app = express.Router();
 
@@ -18,8 +18,8 @@ app.get("/my", myApplies);
 
 app.get("/existing/:id", existingApply);
 
-app.get("/all/:id",adminOnly, allApplies);
+app.get("/all/:id",recruiterOnly, allApplies);
 
-app.route("/:id").get(getSingleApply).put(adminOnly,changeStatus).delete(adminOnly,deleteApply);
+app.route("/:id").get(getSingleApply).put(recruiterOnly,changeStatus).delete(recruiterOnly,deleteApply);
 
 export default app;

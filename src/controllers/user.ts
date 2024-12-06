@@ -3,7 +3,6 @@ import { User } from "../models/user.js";
 import { NewUserRequestBody } from "../types/types.js";
 import { TryCatch } from "../middlewares/error.js";
 import ErrorHandler from "../utils/utility-class.js";
-import { rm } from "fs";
 
 export const newUser = TryCatch(
   async (
@@ -11,8 +10,7 @@ export const newUser = TryCatch(
     res: Response,
     next: NextFunction
   ) => {
-    const { name, email, photo, gender, _id, dob } = req.body;
-    // const resume = req.file;
+    const { name, email, photo, gender, _id, dob, role } = req.body;
     let user = await User.findById(_id);
     if (user) {
       return res.status(200).json({
@@ -21,10 +19,7 @@ export const newUser = TryCatch(
       });
     }
 
-    // if (!resume) return next(new ErrorHandler("Please add Resume", 400));
-
-    if (!_id || !name || !email || !photo || !dob || !gender) {
-      // rm(resume.path, () => console.log("deleted"));
+    if (!_id || !name || !email || !photo || !dob || !gender || !role) {
       return next(new ErrorHandler("Please add all fields", 400));
     }
 
@@ -32,9 +27,10 @@ export const newUser = TryCatch(
       name,
       email,
       photo,
+      role,
       gender,
       _id,
-      dob: new Date(dob), // resume: resume.path,
+      dob: new Date(dob),
     });
     return res.status(201).json({
       success: true,

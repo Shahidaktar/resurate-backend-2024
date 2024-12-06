@@ -14,3 +14,16 @@ export const adminOnly = TryCatch(async (req, res, next) => {
 
   next();
 });
+
+export const recruiterOnly = TryCatch(async (req, res, next) => {
+  const { id } = req.query;
+  if (!id) return next(new ErrorHandler("Please login First", 401));
+
+  const user = await User.findById(id);
+  if (!user) return next(new ErrorHandler("User not Found", 401));
+
+  if (user.role !== "recruiter")
+    return next(new ErrorHandler("Only recruiters can access", 401));
+
+  next();
+});

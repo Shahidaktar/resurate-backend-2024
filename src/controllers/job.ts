@@ -10,20 +10,19 @@ import { Job } from "../models/job.js";
 
 export const newJob = TryCatch(
   async (req: Request<{}, {}, NewJobRequestBody>, res, next) => {
+    const { id} = req.query;
     const {
       name,
       company,
       jobSummary,
       responsibities,
       skils,
-      eligbilty,
       jobType,
       location,
       openings,
       pay,
       experience,
-      startDate,
-      endDate,
+      status
     } = req.body;
 
     if (
@@ -32,14 +31,13 @@ export const newJob = TryCatch(
       !jobSummary ||
       !responsibities ||
       !skils ||
-      !eligbilty ||
+      !status ||
       !jobType ||
       !location ||
       !openings ||
       !pay ||
       !experience ||
-      !startDate ||
-      !endDate
+      !id
     ) {
       return next(new ErrorHandler("Please enter all Fields", 400));
     }
@@ -49,14 +47,13 @@ export const newJob = TryCatch(
       jobSummary,
       responsibities,
       skils,
-      eligbilty,
+      status,
       jobType,
       location,
       openings,
       pay,
       experience,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
+      user: id
     });
 
     return res.status(201).json({
@@ -67,7 +64,17 @@ export const newJob = TryCatch(
 );
 
 export const getAdminJobs = TryCatch(async (req, res, next) => {
-  const data = await Job.find({});
+  
+  const data = await Job.find({}).populate("user");
+  return res.status(200).json({
+    success: true,
+    data,
+  });
+});
+
+export const getRecruiterJobs = TryCatch(async (req, res, next) => {
+  const { id } = req.query;
+  const data = await Job.find({user:id as string});
   return res.status(200).json({
     success: true,
     data,
@@ -76,11 +83,11 @@ export const getAdminJobs = TryCatch(async (req, res, next) => {
 
 export const getAllJobs = TryCatch(
   async (req: Request<{}, {}, {}, SearchRequestQuery>, res, next) => {
-    const { search, jobType, location } = req.query;
+    const { search, jobType, location, experience, status } = req.query;
 
     const page = Number(req.query.page) || 1;
 
-    const limit = Number(process.env.PRODUCT_PER_PAGE) || 8;
+    const limit = Number(process.env.PRODUCT_PER_PAGE) || 6;
     const skip = (page - 1) * limit;
 
     const baseQuery: BaseQuery = {};
@@ -94,6 +101,10 @@ export const getAllJobs = TryCatch(
     if (jobType) baseQuery.jobType = jobType;
 
     if (location) baseQuery.location = location;
+
+    if (experience) baseQuery.experience = experience;
+
+    if (status) baseQuery.status = status;
 
     const jobPromise = Job.find(baseQuery).limit(limit).skip(skip);
 
@@ -130,14 +141,12 @@ export const updateJob = TryCatch(async (req, res, next) => {
     jobSummary,
     responsibities,
     skils,
-    eligbilty,
+    status,
     jobType,
     location,
     openings,
     pay,
     experience,
-    startDate,
-    endDate,
   } = req.body;
 
   const job = await Job.findById(id);
@@ -148,14 +157,12 @@ export const updateJob = TryCatch(async (req, res, next) => {
   if (jobSummary) job.jobSummary = jobSummary;
   if (responsibities) job.responsibities = responsibities;
   if (skils) job.skils = skils;
-  if (eligbilty) job.eligbilty = eligbilty;
+  if (status) job.status = status;
   if (jobType) job.jobType = jobType;
   if (location) job.location = location;
   if (openings) job.openings = openings;
   if (pay) job.pay = pay;
   if (experience) job.experience = experience;
-  if (startDate) job.startDate = startDate;
-  if (endDate) job.endDate = endDate;
 
   await job.save();
 

@@ -10,6 +10,7 @@ export interface NewUserRequestBody {
   name: string;
   email: string;
   photo: string;
+  role: string;
   gender: string;
   resume: string;
   _id: string;
@@ -24,22 +25,22 @@ export interface NewJobRequestBody {
   name: string;
   company: string;
   pay: string;
-  experience: string;
+  experience: number;
   jobType: string;
   location: string;
   openings: number;
   jobSummary: string;
   responsibities: string;
   skils: string;
-  eligbilty: string;
-  startDate: Date;
-  endDate: Date;
+  status: string;
 }
 
 export type SearchRequestQuery = {
   search?: string;
   location?: string;
   jobType?: string;
+  experience?: string;
+  status?: string;
   page?: string;
 };
 
@@ -50,6 +51,8 @@ export interface BaseQuery {
   };
   location?: string;
   jobType?: string;
+  experience?: string;
+  status?: string;
 }
 
 // export type jobType = {
