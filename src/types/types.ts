@@ -25,7 +25,7 @@ export interface NewJobRequestBody {
   name: string;
   company: string;
   pay: string;
-  experience: number;
+  experience: string;
   jobType: string;
   location: string;
   openings: number;
