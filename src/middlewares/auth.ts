@@ -22,8 +22,8 @@ export const recruiterOnly = TryCatch(async (req, res, next) => {
   const user = await User.findById(id);
   if (!user) return next(new ErrorHandler("User not Found", 401));
 
-  if (user.role !== "recruiter")
-    return next(new ErrorHandler("Only recruiters can access", 401));
+  if (user.role !== "recruiter" && user.role !== "admin")
+    return next(new ErrorHandler("Only recruiters and admins can access", 401));
 
   next();
 });

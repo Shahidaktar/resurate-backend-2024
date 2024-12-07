@@ -83,7 +83,7 @@ export const getRecruiterJobs = TryCatch(async (req, res, next) => {
 
 export const getAllJobs = TryCatch(
   async (req: Request<{}, {}, {}, SearchRequestQuery>, res, next) => {
-    const { search, jobType, location, experience, status } = req.query;
+    const { search, jobType, location, experience, status,pay } = req.query;
 
     const page = Number(req.query.page) || 1;
 
@@ -106,10 +106,13 @@ export const getAllJobs = TryCatch(
 
     if (status) baseQuery.status = status;
 
+    if (pay) baseQuery.pay = pay;
+
     const jobPromise = Job.find(baseQuery).limit(limit).skip(skip);
 
-    const [jobs, filteredOnlyJob] = await Promise.all([
+    const [jobs, allJobs, filteredOnlyJob] = await Promise.all([
       jobPromise,
+      Job.find(),
       Job.find(baseQuery),
     ]);
 
@@ -118,6 +121,7 @@ export const getAllJobs = TryCatch(
     return res.status(200).json({
       success: true,
       jobs,
+      allJobs,
       totalPage,
     });
   }

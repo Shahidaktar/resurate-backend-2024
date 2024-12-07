@@ -4,6 +4,7 @@ import userRoute from "./routes/user.js";
 import jobRoute from "./routes/job.js";
 import applyRoute from "./routes/apply.js";
 import resumeRoute from "./routes/resume.js";
+import commentRoute from "./routes/comment.js";
 
 import { errorMiddleware } from "./middlewares/error.js";
 import { connectDB } from "./utils/features.js";
@@ -34,6 +35,7 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/apply", applyRoute);
 app.use("/api/v1/resume", resumeRoute);
+app.use("/api/v1/comment", commentRoute);
 
 app.use("/uploads", express.static("uploads"));
 app.use(errorMiddleware);

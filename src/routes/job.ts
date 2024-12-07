@@ -18,6 +18,6 @@ app
   .route("/:id")
   .get(getSingleJob)
   .put(recruiterOnly,updateJob)
-  .delete(adminOnly,deleteJob);
+  .delete(recruiterOnly,deleteJob);
 
 export default app;

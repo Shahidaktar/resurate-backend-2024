@@ -42,6 +42,7 @@ export type SearchRequestQuery = {
   experience?: string;
   status?: string;
   page?: string;
+  pay?: string;
 };
 
 export interface BaseQuery {
@@ -53,6 +54,7 @@ export interface BaseQuery {
   jobType?: string;
   experience?: string;
   status?: string;
+  pay?: string;
 }
 
 // export type jobType = {
