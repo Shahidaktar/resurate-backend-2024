@@ -7,22 +7,24 @@ import { NewApplyRequestBody } from "../types/types.js";
 export const newApply = TryCatch(
   async (req: Request<{}, {}, NewApplyRequestBody>, res, next) => {
     const { user } = req.query;
-    const { job,resume,score } = req.body;
+    const { job, resume, score } = req.body;
 
     if (!job || !user || !resume || !score)
-      return next(new ErrorHandler("Please enter all Fields", 400)); 
+      return next(new ErrorHandler("Please enter all Fields", 400));
 
-    const existingApply = await Apply.findOne({ user:user as string, job });
+    const existingApply = await Apply.findOne({ user: user as string, job });
 
     if (existingApply) {
-      return next(new ErrorHandler("You have already applied for this job.", 400));
+      return next(
+        new ErrorHandler("You have already applied for this job.", 400)
+      );
     }
 
     const apply = await Apply.create({
       user,
       job,
       resume,
-      score
+      score,
     });
 
     return res.status(201).json({
@@ -36,7 +38,7 @@ export const myApplies = TryCatch(async (req, res, next) => {
   const { id } = req.query;
 
   const data = await Apply.find({ user: id as string })
-  .select(["user","job", "status"])
+    .select(["user", "job", "status"])
     .populate("job");
 
   return res.status(200).json({
@@ -46,32 +48,31 @@ export const myApplies = TryCatch(async (req, res, next) => {
 });
 
 export const existingApply = TryCatch(async (req, res, next) => {
-  const  {user}  = req.query;
+  const { user } = req.query;
   const id = req.params.id;
+  let status = false;
 
-    if (!id || !user )
-      return next(new ErrorHandler("Please enter all Fields", 400)); 
+  if (!id || !user)
+    return next(new ErrorHandler("Please enter all Fields", 400));
 
-    const existingApply = await Apply.findOne({ user:user as string, job:id });
+  const existingApply = await Apply.findOne({ user: user as string, job: id });
 
-    if (existingApply) {
-      return next(new ErrorHandler("You have already applied for this job.", 400));
-    }
+  if (existingApply) {
+    status = true;
+  }
 
   return res.status(200).json({
     success: true,
-    existingApply,
+    status,
   });
 });
-
-
 
 export const allApplies = TryCatch(async (req, res, next) => {
   const { id } = req.params;
   const data = await Apply.find({ job: id })
-    .select(["_id", "user", "status","score","job"])
+    .select(["_id", "user", "status", "score", "job"])
     .populate("user")
-    .sort({ score: -1 })
+    .sort({ score: -1 });
   return res.status(200).json({
     success: true,
     data,
@@ -98,7 +99,7 @@ export const changeStatus = TryCatch(async (req, res, next) => {
   const apply = await Apply.findById(id);
   if (!apply) return next(new ErrorHandler("Applicant Not Found", 404));
 
-  if (status) apply.status  = status;
+  if (status) apply.status = status;
 
   await apply.save();
 
