@@ -12,6 +12,18 @@ const schema = new mongoose.Schema(
       ref: "Resume",
       required: true,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    workExperience: {
+      type: String,
+      required: true,
+    },
     score: {
       type: Number,
       required: true,

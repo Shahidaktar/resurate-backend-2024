@@ -7,9 +7,17 @@ import { NewApplyRequestBody } from "../types/types.js";
 export const newApply = TryCatch(
   async (req: Request<{}, {}, NewApplyRequestBody>, res, next) => {
     const { user } = req.query;
-    const { job, resume, score } = req.body;
+    const { job, resume, score, phone, location, workExperience } = req.body;
 
-    if (!job || !user || !resume || !score)
+    if (
+      !job ||
+      !user ||
+      !resume ||
+      !score ||
+      !phone ||
+      !location ||
+      !workExperience
+    )
       return next(new ErrorHandler("Please enter all Fields", 400));
 
     const existingApply = await Apply.findOne({ user: user as string, job });
@@ -25,6 +33,9 @@ export const newApply = TryCatch(
       job,
       resume,
       score,
+      phone,
+      location,
+      workExperience,
     });
 
     return res.status(201).json({

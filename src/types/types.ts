@@ -64,7 +64,10 @@ export interface BaseQuery {
 
 export interface NewApplyRequestBody {
   user: string;
-  resume:string;
-  score:number;
+  resume: string;
+  score: number;
   job: string;
+  phone: string;
+  location: string;
+  workExperience: string;
 }
